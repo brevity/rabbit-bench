@@ -1,0 +1,16 @@
+{
+  "name": "jackalope",
+  "version": "0.0.0",
+  "description": "effing around with rabbitjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "rabbit.js": "~0.4.1",
+    "minimist": "0.0.8",
+    "colors": "~0.6.2"
+  }
+}
