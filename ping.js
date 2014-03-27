@@ -7,7 +7,7 @@ var argv        = require('minimist')(process.argv.slice(2)),
 
 var rabbitServer = argv.p ? rabbitPro : rabbitDev;
 var socketType   = argv.type || 'PUSH';
-var queue      = argv.q || 'test';
+var queue      = argv.queue || 'test';
 
 // HEY! Prep some test objects to pass down to pipe.
 var article = {};
@@ -17,7 +17,7 @@ article = JSON.stringify(article);
 // Show the user a friendly suggestion.
 console.log("------- Time To Start Pinging! --------".green);
 console.log("connect to a different queue like so...".blue);
-console.log("$".yellow +" node ping --q=random-queue-name".white);
+console.log("$".yellow +" node ping --queue=random-queue-name".white);
 console.log("connect to production amqp server like so...".blue);
 console.log("$".yellow +" node ping -p".white);
 console.log("----------------------------------------");
@@ -25,7 +25,7 @@ console.log("----------------------------------------");
 var context = require('rabbit.js').createContext(rabbitServer);
 
 context.on('error', function(e){
-  console.log("[ rabbitMQ is down :-( ]".red);
+  console.log("[ rabbitMQ server is down :-( ]".red);
   console.log(e.grey);
 });
 
