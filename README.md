@@ -1,28 +1,33 @@
-You might need to install some Stuff.
+## You might need to install some things.
 
-- install [rabbitMQ] (https://www.rabbitmq.com/install-standalone-mac.html)
+- [rabbitMQ](https://www.rabbitmq.com/install-standalone-mac.html)
 - [nodejs](http://nodejs.org/)
 
-And you will definitely need to do some stuff
-- install node requirements
+## But you will definitely need to run some commands.
+
+__Install required node packages__
+
 ```bash
 $ npm install
 ```
 
-- open up the .env file and put in your production amqp uri
-
-_source that_
+__To start the pinger__
 
 ```bash
-$ source .env
+$ node ping
 ```
 
-_start the worker_
+__To play with an example worker.__
+
 ```bash
 $ node work
 ```
 
-_start the pinger_
+
+__To connect to a production server.__
+
+Open up the .env file and put in your production amqp uri, then source it.
+
 ```bash
-$ node ping
+$ source .env
 ```
