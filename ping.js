@@ -3,7 +3,6 @@ var argv        = require('minimist')(process.argv.slice(2)),
     colors      = require('colors'),
     rabbitDev   = 'amqp://localhost',
     rabbitPro   = process.env.AMQP_SRVR,
-    cliMessage  = process.argv.splice(2).join(" ") || "n/a",
     encoding    = 'utf8';
 
 var rabbitServer = argv.p ? rabbitPro : rabbitDev;
@@ -16,8 +15,12 @@ article.doi = '10.4161/biom.22905';
 article = JSON.stringify(article);
 
 // Show the user a friendly suggestion.
-console.log("----- Time To Start Pinging! -------".green);
-
+console.log("------- Time To Start Pinging! --------".green);
+console.log("connect to a different queue like so...".blue);
+console.log("$".yellow +" node ping --q=random-queue-name".white);
+console.log("connect to production amqp server like so...".blue);
+console.log("$".yellow +" node ping -p".white);
+console.log("----------------------------------------");
 //Connect to RabbitMQ server and prompt user for input
 var context = require('rabbit.js').createContext(rabbitServer);
 
@@ -28,13 +31,13 @@ context.on('error', function(e){
 
 context.on('ready', function(){
   //connect to server
-  console.log("[connecting to server] ".green + rabbitServer.blue);
+  console.log("    [server] ".green + rabbitServer.blue);
   var pub = context.socket(socketType);
   // socket created
   pub.setsockopt('persistent', true);
   pub.connect(queue, function(){
   console.log("[socketType] ".green + socketType.blue);
-  console.log("[queue] ".green + queue.blue);
+  console.log("     [queue] ".green + queue.blue);
     process.stdin.resume();
     process.stdin.setEncoding('utf8');
     process.stdin.on('data', function(chunk){

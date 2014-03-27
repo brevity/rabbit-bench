@@ -4,7 +4,7 @@ var argv        = require('minimist')(process.argv.slice(2)),
     fs          = require('fs'),
     rabbitDev   = 'amqp://localhost',
     rabbitPro   = process.env.AMQP_SRVR,
-    queue       = 'new-articles',
+    queue       = 'test',
     encoding    = 'utf8';
 
 var rabbitServer = argv.p ? rabbitPro : rabbitDev;
