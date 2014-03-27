@@ -3,12 +3,12 @@ var argv        = require('minimist')(process.argv.slice(2)),
     colors      = require('colors'),
     rabbitDev   = 'amqp://localhost',
     rabbitPro   = process.env.AMQP_SRVR,
-    testQueue   = 'messages',
+    queue       = 'new-articles',
     cliMessage  = process.argv.splice(2).join(" ") || "n/a",
     encoding    = 'utf8';
 
 var rabbitServer = argv.p ? rabbitPro : rabbitDev;
-var socketType    = argv.socketType || 'PUSH';
+var socketType   = argv.socketType || 'PUSH';
 
 // Prep some test objects to pass down to pipe.
 var doi = {};
@@ -19,13 +19,17 @@ doi = JSON.stringify(doi);
 
 //Connect to RabbitMQ server and prompt user for input
 var context       = require('rabbit.js').createContext(rabbitServer);
+  context.on('error', function(e){
+    console.log("[ rabbitMQ is down :-( ]".red);
+    console.log(e.grey);
+  });
 context.on('ready', function(){
   //connect to server
   console.log("[connecting] ".green + rabbitServer.blue);
   var pub = context.socket(socketType);
   // socket created
   pub.setsockopt('persistent', true);
-  pub.connect(testQueue, function(){
+  pub.connect(queue, function(){
     process.stdin.resume();
     process.stdin.setEncoding('utf8');
     process.stdin.on('data', function(chunk){

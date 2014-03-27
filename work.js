@@ -4,19 +4,22 @@ var argv        = require('minimist')(process.argv.slice(2)),
     fs          = require('fs'),
     rabbitDev   = 'amqp://localhost',
     rabbitPro   = process.env.AMQP_SRVR,
-    testQueue   = 'messages',
+    queue       = 'new-articles',
     encoding    = 'utf8';
 
 var rabbitServer = argv.p ? rabbitPro : rabbitDev;
 var name = argv.name || 'unnamed';
-function work(msg){
-    // console.log(msg.blue);
-}
+
+
 var context = require('rabbit.js').createContext(rabbitServer);
+  context.on('error', function(e){
+    console.log("[ rabbitMQ is down :-( ]".red);
+    console.log(e.grey);
+  });
 context.on('ready', function() {
   console.log("[connecting] ".green + rabbitServer.blue);
   var  sub = context.socket('WORKER');
-  sub.connect('messages', function() {
+  sub.connect(queue, function() {
     sub.setEncoding(encoding);
     sub.on('data', function(msg){
     setTimeout(function(){
@@ -26,7 +29,7 @@ context.on('ready', function() {
         console.log("[work done]".green + msg.blue);
         sub.ack();
       });
-    }, 3000);
+    }, 300);
     });
     // not sure if we need something here.
   });
