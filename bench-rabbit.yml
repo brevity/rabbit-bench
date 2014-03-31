@@ -10,16 +10,16 @@ session:
           - "vim work.js"
         - cmd:
           - "clear"
-          - "sleep 4; node work --queue=scraper"
+          - "sleep 6; node work --queue=scraper"
         - cmd:
           - "clear"
-          - "sleep 4; node work --queue=search"
+          - "sleep 6; node work --queue=search"
         - cmd:
           - "clear"
-          - "sleep 2; node conf"
+          - "sleep 4; node conf"
         - cmd:
           - "clear"
           - "rabbitmq-server;"
         - cmd:
           - "clear"
-          - "sleep 5; node publish"
+          - "sleep 6; node publish"
