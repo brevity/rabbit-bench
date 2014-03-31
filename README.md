@@ -37,9 +37,11 @@ Open up the .env file and put in your production amqp uri, then source it.
 ```bash
 $ source .env
 ```
+
+__Set some handy shell aliases__
 ```bash
-   alias it_rabbit_reset='rabbitmqctl stop_app; rabbitmqctl reset; rabbitmqctl start_app;'
-   alias it_rabbit_queues='rabbitmqctl list_queues;'
-   alias it_rabbit_exchanges='rabbitmqctl list_exchanges;'
-   alias it_rabbit_stat='rabbitmqctl list_exchanges | grep -v amq | grep -v direct; rabbitmqctl list_queues
+   alias rabbit_reset='rabbitmqctl stop_app; rabbitmqctl reset; rabbitmqctl start_app;'
+   alias rabbit_stat='rabbitmqctl list_exchanges | grep -v amq | grep -v direct; rabbitmqctl list_queues
+   alias rabbit_queues='rabbitmqctl list_queues;'
+   alias rabbit_exchanges='rabbitmqctl list_exchanges;'
 ```
