@@ -64,23 +64,49 @@ function createNewQueue(name, exchange){
 }
 
 function setup(){
-  connection.addListener('ready', function(){
     var names = exchanges.apps.names;
     for (var i = 0 ; i < names.length ; i++) {
       bindAppToPush(names[i]);
     }
+}
+
+function destroyQueue(name){
+  console.log("Destroying queue ----> " + name.blue);
+  connection.queue(name,  { durable: false, autoDelete: false}, function(q){
+      q.destroy();
+  });
+}
+
+function destroyExchange(name){
+  console.log("Destroying exchange--> " + name.blue);
+  connection.exchange(name,  { durable: false, autoDelete: false}, function(x){
+      x.destroy();
   });
 }
 
 function reset(){
-  console.log("resetting".red);
-
+    var names = exchanges.apps.names;
+    for (var i = 0; i < names.length; i++){
+      //destroyExchange(names[i]);
+      console.log("resetting".red);
+      destroyQueue(names[i]);
+      destroyExchange(names[i]);
+    }
+    destroyExchange('pub-exchange');
 }
 
-switch (action){
-  case 'reset':
-    reset();
-    break;
-  default:
-    setup();
-}
+connection.addListener('error', function (e){
+  throw e;
+});
+connection.addListener('close', function (e){
+  console.log("connection closed".red);
+});
+connection.once('ready', function(){
+  switch (action){
+    case 'reset':
+      reset();
+      break;
+    default:
+      setup();
+  }
+});
