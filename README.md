@@ -11,10 +11,16 @@ __Install required node packages__
 $ npm install
 ```
 
-__To start the pinger__
+__start the config setup__
 
 ```bash
-$ node ping
+$ node config
+```
+
+__To start the test publisher__
+
+```bash
+$ node publish
 ```
 
 __To play with an example worker.__
