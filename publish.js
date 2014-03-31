@@ -23,53 +23,20 @@ console.log("----------------------------------------");
 console.log("[server] ".green + rabbitServer.blue);
 console.log("[ queue] ".green + queue.blue);
 
+var exchanges = {};
+exchanges.pub = {
+  name : 'pub-exchange'
+};
+exchanges.pub.options ={
+  type : 'topic',
+  autoDelete : false
+};
 // HEY! Prep some test objects to pass down to pipe.
 var article = {};
 article.doi = '10.4161/biom.22905';
 article = JSON.stringify(article);
 
-var exchanges = {};
-exchanges.pub = {
-  name : 'pub-exchange'
-};
-exchanges.apps = {
-  names : ['scraper', 'search']
-};
-
-exchanges.pub.options ={
-  type : 'topic',
-  autoDelete : false
-};
-exchanges.apps.options ={
-  type : 'topic',
-  autoDelete : false
-};
-
-function bindAppToPush(dstName){
-  var ex = exchanges.pub;
-  connection.exchange(dstName, exchanges.apps.options, function(dstExchange){
-    connection.exchange(ex.name, ex.options, function(pubExchange){
-      dstExchange.bind(pubExchange, "#", function(){
-      console.log(String(dstExchange.name + " exchange bound to " + pubExchange.name).yellow);
-      createNewQueue(dstName, dstExchange);
-      });
-    });
-  });
-}
-function createNewQueue(name, exchange){
-  connection.queue(name, { durable: false, autoDelete: false}, function(q){
-    q.bind(exchange, '#', function(){
-      console.log(String(q.name + " queue bound to exchange:" + exchange.name).yellow);
-    });
-  });
-}
-
-
 connection.addListener('ready', function(){
-  var names = exchanges.apps.names;
-  for (var i = 0 ; i < names.length ; i++) {
-    bindAppToPush(names[i]);
-  }
 
   // Wait for connection to become established.
     var pub = exchanges.pub;
