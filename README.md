@@ -57,7 +57,7 @@ $ source .env
 __Set some handy shell aliases__
 ```bash
    alias rabbit_reset='rabbitmqctl stop_app; rabbitmqctl reset; rabbitmqctl start_app;'
-   alias rabbit_stat='rabbitmqctl list_exchanges | grep -v amq | grep -v direct; rabbitmqctl list_queues
+   alias rabbit_stat='rabbitmqctl list_exchanges | grep -v amq | grep -v direct; rabbitmqctl list_queues'
    alias rabbit_queues='rabbitmqctl list_queues;'
    alias rabbit_exchanges='rabbitmqctl list_exchanges;'
 ```
