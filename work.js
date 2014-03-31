@@ -8,11 +8,19 @@ var argv    = require('minimist')(process.argv.slice(2)),
     colors  = require('colors'),
     amqp    = require('amqp');
 
-var rabbitDev     = 'localhost',
-    rabbitPro     = process.env.AMQP_SRVR,
-    queueName      = argv.queue || 'worker',
-    rabbitServer  = argv.p ? rabbitPro : rabbitDev,
-    connection    = amqp.createConnection({ host: rabbitServer});
+var queueName      = argv.queue || 'worker',
+    env           = process.env,
+    cloudAMQP     = {
+                      host     : env.AMQP_SRVR,
+                      vhost    : env.AMQP_VHOST,
+                      login    : env.AMQP_LOGIN,
+                      password : env.AMQP_PSWD,
+                      noDelay  : true,
+                      ssl      : { enabled : false },
+                      connectionTimeout: 0
+                    },
+    rabbitCreds   = argv.p ? cloudAMQP : {host : 'localhost'},
+    connection    = amqp.createConnection(rabbitCreds);
 
 console.log("------- Time To Start Working! --------".green);
 console.log("connect to a different queue like so...".blue);
@@ -20,13 +28,13 @@ console.log("$".yellow +" node work --queue=random-queue-name".white);
 console.log("connect to production amqp server like so...".blue);
 console.log("$".yellow +" node work -p".white);
 console.log("----------------------------------------");
-console.log("    [server] ".green + rabbitServer.blue);
+console.log("    [server] ".green + rabbitCreds.host.blue);
 console.log("     [queue] ".green + queueName.blue);
 
 
 function createNewQueue(name){
-  connection.exchange(name, {type: 'topic', autoDelete: false}, function(ex){
-    connection.queue(name, { durable: false, autoDelete: false}, function(q){
+  connection.exchange(name, {type: 'topic', durable:true, autoDelete: false}, function(ex){
+    connection.queue(name, { durable: true, autoDelete: false}, function(q){
       q.bind(ex, "#");
       q.subscribe({ ack: true }, function(msg){
         console.log(msg);

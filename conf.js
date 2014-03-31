@@ -8,18 +8,26 @@ var argv    = require('minimist')(process.argv.slice(2)),
     colors  = require('colors'),
     amqp    = require('amqp');
 
-var rabbitDev     = 'localhost',
-    rabbitPro     = process.env.AMQP_SRVR,
-    queue         = 'pub-exchange',
+var queue         = 'pub-exchange',
     action        = argv.act || 'setup',
-    rabbitServer  = argv.p ? rabbitPro : rabbitDev,
-    connection    = amqp.createConnection({ host: rabbitServer});
+    env           = process.env,
+    cloudAMQP     = {
+                      host     : env.AMQP_SRVR,
+                      vhost    : env.AMQP_VHOST,
+                      login    : env.AMQP_LOGIN,
+                      password : env.AMQP_PSWD,
+                      noDelay  : true,
+                      ssl      : { enabled : false },
+                      connectionTimeout: 0
+                    },
+    rabbitCreds   = argv.p ? cloudAMQP : {host : 'localhost'},
+    connection    = amqp.createConnection(rabbitCreds);
 
 
 
 console.log("----------------Configuring the amqp server--------------".green);
 console.log("---------------------------------------------------------");
-console.log("[server] ".green + rabbitServer.blue);
+console.log("[server] ".green + rabbitCreds.host.blue);
 console.log("[action] ".green + action.blue);
 
 // HEY! Prep some test objects to pass down to pipe.
@@ -35,19 +43,16 @@ exchanges.apps = {
   names : ['scraper', 'search']
 };
 
-exchanges.pub.options ={
-  type : 'topic',
-  autoDelete : false
-};
-exchanges.apps.options ={
-  type : 'topic',
+exchanges.options ={
+  type       : 'topic',
+  durable    : true,
   autoDelete : false
 };
 
 function bindAppToPush(dstName){
   var ex = exchanges.pub;
-  connection.exchange(dstName, exchanges.apps.options, function(dstExchange){
-    connection.exchange(ex.name, ex.options, function(pubExchange){
+  connection.exchange(dstName, exchanges.options, function(dstExchange){
+    connection.exchange(ex.name, exchanges.options, function(pubExchange){
       dstExchange.bind(pubExchange, "#", function(){
       console.log(String(dstExchange.name + " exchange bound to " + pubExchange.name).yellow);
       createNewQueue(dstName, dstExchange);
@@ -56,7 +61,7 @@ function bindAppToPush(dstName){
   });
 }
 function createNewQueue(name, exchange){
-  connection.queue(name, { durable: false, autoDelete: false}, function(q){
+  connection.queue(name, { durable: true, autoDelete: false}, function(q){
     q.bind(exchange, '#', function(){
       console.log(String(q.name + " queue bound to exchange:" + exchange.name).yellow);
     });
@@ -72,14 +77,14 @@ function setup(){
 
 function destroyQueue(name){
   console.log("Destroying queue ----> " + name.blue);
-  connection.queue(name,  { durable: false, autoDelete: false}, function(q){
+  connection.queue(name,  { durable: true, autoDelete: false}, function(q){
       q.destroy();
   });
 }
 
 function destroyExchange(name){
   console.log("Destroying exchange--> " + name.blue);
-  connection.exchange(name,  { durable: false, autoDelete: false}, function(x){
+  connection.exchange(name,  exchanges.options, function(x){
       x.destroy();
   });
 }
