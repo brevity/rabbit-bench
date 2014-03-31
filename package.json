@@ -1,16 +1,29 @@
 {
   "name": "rabbit-bench",
   "version": "0.0.1",
-  "description": "",
-  "main": "config.js",
+  "description": "## This is just an example of one way to set up a rabbitMQ server",
+  "main": "conf.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Andrew Toelle",
   "license": "MIT",
   "dependencies": {
     "amqp": "~0.2.0",
     "colors": "~0.6.2",
     "minimist": "0.0.8"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/brevity/rabbit-bench.git"
+  },
+  "keywords": [
+    "amqp",
+    "cli"
+  ],
+  "bugs": {
+    "url": "https://github.com/brevity/rabbit-bench/issues"
+  },
+  "homepage": "https://github.com/brevity/rabbit-bench"
 }

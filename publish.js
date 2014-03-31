@@ -16,9 +16,9 @@ var rabbitDev     = 'localhost',
 
 console.log("------- Time To Start publishing! --------".green);
 console.log("connect to a different queue like so...".blue);
-console.log("$".yellow +" node ping --queue=random-queue-name".white);
+console.log("$".yellow +" node publish --queue=random-queue-name".white);
 console.log("connect to production amqp server like so...".blue);
-console.log("$".yellow +" node ping -p".white);
+console.log("$".yellow +" node publish -p".white);
 console.log("----------------------------------------");
 console.log("[server] ".green + rabbitServer.blue);
 console.log("[ queue] ".green + queue.blue);

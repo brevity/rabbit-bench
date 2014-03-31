@@ -17,7 +17,8 @@ var rabbitDev     = 'localhost',
 
 
 
-console.log("----------------Configuring the server--------------".green);
+console.log("----------------Configuring the amqp server--------------".green);
+console.log("---------------------------------------------------------");
 console.log("[server] ".green + rabbitServer.blue);
 console.log("[action] ".green + action.blue);
 
