@@ -1,15 +1,17 @@
-# This is just an example of one way to set up a rabbitMQ server
+# rabbit-bench
 
-__There are three processes here.__
+## This is just an example of one way to set up a rabbitMQ server
 
-_config.js_ -- which is responsible for
+_There are three processes here._
+
+__config.js__ -- which is responsible for
 setting up the rabbitMQ server with appropriate topic exchanges and some initial
 queues.
 
-_work.js_ -- which shows how a worker application can subscribe to it's
+__work.js__ -- which shows how a worker application can subscribe to it's
 default queue.
 
-_Publisher.js_ which is a super-simple cli for storing and publishing amqp
+__Publisher.js__ which is a super-simple cli for storing and publishing amqp
 messages.
 
 ## You might need to install some things.
