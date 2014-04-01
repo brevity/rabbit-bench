@@ -40,7 +40,7 @@ exchanges.pub = {
   name : 'pub-exchange'
 };
 exchanges.apps = {
-  names : ['scraper', 'search']
+  names : ['scraper', 'searcher', 'reporter']
 };
 
 exchanges.options ={
