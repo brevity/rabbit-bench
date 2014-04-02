@@ -51,7 +51,7 @@ connection.addListener('ready', function(){
     var pub = exchanges.pub;
     connection.exchange(pub.name, pub.options, function(ex){
       var  opts = {contentType: 'application/json', contentEncoding: 'utf8', deliveryMode:2},
-          route = 'admin.article.new';
+          route = String(argv.route + ".article.new") || 'admin.article.new';
 
       process.stdin.resume();
       process.stdin.setEncoding('utf8');

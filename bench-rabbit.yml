@@ -3,17 +3,20 @@ session:
   windows:
     - name: "Bench"
       root: "/Users/itintern/code/rabbit-bench"
-      layout: 7f14,318x62,0,0[318x31,0,0,24,318x15,0,32{79x15,0,32,25,79x15,80,32,31,158x15,160,32,30},318x14,0,48{159x14,0,48,28,158x14,160,48,29}]
+      layout: 8347,318x62,0,0[318x30,0,0,128,318x12,0,31{69x12,0,31,129,79x12,70,31,143,84x12,150,31,130,83x12,235,31,131},318x18,0,44{159x18,0,44,132,158x18,160,44,133}]
       panes:
         - cmd:
           - "clear"
-          - "vim work.js"
+          - "vim conf.js"
         - cmd:
           - "clear"
           - "sleep 6; node work --queue=scraper"
         - cmd:
           - "clear"
-          - "sleep 6; node work --queue=search"
+          - "sleep 6; node work --queue=reporter"
+        - cmd:
+          - "clear"
+          - "sleep 6; node work --queue=searcher"
         - cmd:
           - "clear"
           - "sleep 4; node conf"
