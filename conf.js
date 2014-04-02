@@ -68,7 +68,7 @@ function bindAppToPush(dstName){
 }
 function createNewQueue(name, exchange){
   connection.queue(name, { durable: true, autoDelete: false}, function(q){
-    q.bind(exchange, '#', function(){
+    q.bind(exchange, bindings[name], function(){
       console.log(String(q.name + " queue bound to exchange:" + exchange.name).yellow);
     });
   });

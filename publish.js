@@ -51,11 +51,12 @@ connection.addListener('ready', function(){
     var admin = exchanges.admin;
     connection.exchange(admin.name, admin.options, function(ex){
       var opts = {contentType: 'application/json', contentEncoding: 'utf8', deliveryMode:2};
+      var route = '';
 
       process.stdin.resume();
       process.stdin.setEncoding('utf8');
       process.stdin.on('data', function(chunk){
-      var route = String(argv.route) || 'broadcast.article.create';
+      route = String(argv.route) || 'broadcast.article.create';
         chunk = chunk.trim();
         switch (chunk) {
           case 'exit':
@@ -64,6 +65,7 @@ connection.addListener('ready', function(){
             break;
           case '':
           case 'article.create':
+            route = 'broadcast.article.create';
             console.log("[sending article creation message]".yellow);
             ex.publish(route, article, opts );
             break;
