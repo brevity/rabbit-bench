@@ -73,6 +73,10 @@ connection.addListener('ready', function(){
             route = 'broadcast.article.update';
             ex.publish(route, article, opts );
             break;
+          case 'request.report':
+            route = 'broadcast.article.update';
+            ex.publish(route, article, opts );
+            break;
           case 'hose':
             console.log("[sending 30 messages to rabbit]".yellow);
             for (var i = 0; i < 30 ; i++){

@@ -52,7 +52,7 @@ var bindings = {};
 
 bindings.scraper = 'broadcast.article.create';
 bindings.elastic = 'broadcast.article.*';
-bindings.reports = 'request.reports.*';
+bindings.reports = 'request.report.*';
 
 
 function bindAppToPush(dstName){
