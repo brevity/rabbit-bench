@@ -33,15 +33,13 @@ console.log("     [queue] ".green + queueName.blue);
 
 
 function createNewQueue(name){
-  connection.exchange(name, {type: 'topic', durable:true, autoDelete: false}, function(ex){
     connection.queue(name, { durable: true, autoDelete: false}, function(q){
-      q.bind(ex, "#");
+      console.log("connected to queue");
       q.subscribe({ ack: true }, function(msg){
         console.log(msg);
         q.shift();
       });
     });
-  });
 }
 connection.addListener('error', function (e){
   throw e;

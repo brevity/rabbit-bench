@@ -8,7 +8,7 @@ var argv    = require('minimist')(process.argv.slice(2)),
     colors  = require('colors'),
     amqp    = require('amqp');
 
-var queue         = 'pub-exchange',
+var queue         = 'admin',
     action        = argv.act || 'setup',
     env           = process.env,
     cloudAMQP     = {
@@ -36,11 +36,11 @@ article.doi = '10.4161/biom.22905';
 article = JSON.stringify(article);
 
 var exchanges = {};
-exchanges.pub = {
-  name : 'pub-exchange'
+exchanges.admin = {
+  name : 'admin'
 };
 exchanges.apps = {
-  names : ['scraper', 'searcher', 'reporter']
+  names : ['scraper', 'elastic', 'reports']
 };
 
 exchanges.options ={
@@ -48,12 +48,18 @@ exchanges.options ={
   durable    : true,
   autoDelete : false
 };
+var bindings = {};
+
+bindings.scraper = 'broadcast.article.create';
+bindings.elastic = 'broadcast.article.*';
+bindings.reports = 'request.reports.*';
+
 
 function bindAppToPush(dstName){
-  var ex = exchanges.pub;
+  var ex = exchanges.admin;
   connection.exchange(dstName, exchanges.options, function(dstExchange){
     connection.exchange(ex.name, exchanges.options, function(pubExchange){
-      dstExchange.bind(pubExchange, "#", function(){
+      dstExchange.bind(pubExchange, bindings[dstName], function(){
       console.log(String(dstExchange.name + " exchange bound to " + pubExchange.name).yellow);
       createNewQueue(dstName, dstExchange);
       });
@@ -97,7 +103,7 @@ function reset(){
       destroyQueue(names[i]);
       destroyExchange(names[i]);
     }
-    destroyExchange('pub-exchange');
+    destroyExchange('admin');
 }
 
 connection.addListener('error', function (e){

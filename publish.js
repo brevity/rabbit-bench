@@ -8,7 +8,7 @@ var argv    = require('minimist')(process.argv.slice(2)),
     colors  = require('colors'),
     amqp    = require('amqp');
 
-var queue         = argv.queue || 'pub-exchange',
+var queue         = argv.queue || 'admin',
     env           = process.env,
     cloudAMQP     = {
                       host     : env.AMQP_SRVR,
@@ -32,10 +32,10 @@ console.log("[server] ".green + rabbitCreds.host.blue);
 console.log("[ queue] ".green + queue.blue);
 
 var exchanges = {};
-exchanges.pub = {
-  name : 'pub-exchange'
+exchanges.admin = {
+  name : 'admin'
 };
-exchanges.pub.options ={
+exchanges.admin.options ={
   durable : true,
   type : 'topic',
   autoDelete : false
@@ -48,14 +48,14 @@ article = JSON.stringify(article);
 connection.addListener('ready', function(){
 
   // Wait for connection to become established.
-    var pub = exchanges.pub;
-    connection.exchange(pub.name, pub.options, function(ex){
-      var  opts = {contentType: 'application/json', contentEncoding: 'utf8', deliveryMode:2},
-          route = String(argv.route + ".article.new") || 'admin.article.new';
+    var admin = exchanges.admin;
+    connection.exchange(admin.name, admin.options, function(ex){
+      var opts = {contentType: 'application/json', contentEncoding: 'utf8', deliveryMode:2};
 
       process.stdin.resume();
       process.stdin.setEncoding('utf8');
       process.stdin.on('data', function(chunk){
+      var route = String(argv.route) || 'broadcast.article.create';
         chunk = chunk.trim();
         switch (chunk) {
           case 'exit':
@@ -63,7 +63,12 @@ connection.addListener('ready', function(){
             process.exit();
             break;
           case '':
-          case 'article':
+          case 'article.create':
+            console.log("[sending article creation message]".yellow);
+            ex.publish(route, article, opts );
+            break;
+          case 'article.update':
+            route = 'broadcast.article.update';
             ex.publish(route, article, opts );
             break;
           case 'hose':
