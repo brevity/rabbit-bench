@@ -13,10 +13,10 @@ session:
           - "sleep 6; node work --queue=scraper"
         - cmd:
           - "clear"
-          - "sleep 6; node work --queue=reporter"
+          - "sleep 6; node work --queue=reports"
         - cmd:
           - "clear"
-          - "sleep 6; node work --queue=searcher"
+          - "sleep 6; node work --queue=elastic"
         - cmd:
           - "clear"
           - "sleep 4; node conf"
